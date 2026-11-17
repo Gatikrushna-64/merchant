@@ -1,9 +1,9 @@
 import request from 'supertest';
-import { app } from '../src/app';
-import { initDatabase, db } from '../src/db';
-import { AuthService } from '../src/services/authService';
-import { SecurityService } from '../src/services/securityService';
-import { SESSION_COOKIE_NAME } from '../src/middleware/authMiddleware';
+import { app } from '../api/app';
+import { initDatabase, db } from '../api/db';
+import { AuthService } from '../api/services/authService';
+import { SecurityService } from '../api/services/securityService';
+import { SESSION_COOKIE_NAME } from '../api/middleware/authMiddleware';
 import bcrypt from 'bcryptjs';
 
 describe('Section D & G: WebAuthn Passkeys & Biometric Access', () => {

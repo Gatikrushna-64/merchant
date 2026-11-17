@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import crypto from 'crypto';
 import { config } from './config';
+import { initDatabase } from './db';
 import { verifyStateChangingOrigin } from './middleware/authMiddleware';
 import { globalLimiter } from './middleware/rateLimiters';
 import authRoutes from './routes/authRoutes';
@@ -33,7 +34,11 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (e.g. mobile apps, curl, webhooks)
       if (!origin) return callback(null, true);
-      if (config.corsOrigins.includes(origin)) {
+      if (
+        config.corsOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app') ||
+        origin.includes('localhost')
+      ) {
         return callback(null, true);
       }
       return callback(new Error(`CORS origin not allowed: ${origin}`));
@@ -41,6 +46,25 @@ app.use(
     credentials: true
   })
 );
+
+// Lazy cold-start DB initialization for Serverless environments (e.g. Vercel)
+let dbInitPromise: Promise<void> | null = null;
+app.use(async (_req, _res, next) => {
+  if (config.nodeEnv !== 'test') {
+    if (!dbInitPromise) {
+      dbInitPromise = initDatabase().catch((err) => {
+        dbInitPromise = null;
+        throw err;
+      });
+    }
+    try {
+      await dbInitPromise;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
 
 // Global rate limiting
 app.use('/api', globalLimiter);
@@ -66,21 +90,25 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
-// Public app config
-app.get('/api/v1/config', (_req, res) => {
-  res.json({
-    success: true,
-    data: {
-      enablePaymentSimulator: config.enablePaymentSimulator && !config.isProduction
-    }
+// Mount routes helper to support both direct /api/v1 and Vercel-stripped /v1 paths
+const mountApiRoutes = (prefix: string) => {
+  app.get(`${prefix}/config`, (_req, res) => {
+    res.json({
+      success: true,
+      data: {
+        enablePaymentSimulator: config.enablePaymentSimulator && !config.isProduction
+      }
+    });
   });
-});
 
-// Routes
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/orders', orderRoutes);
-app.use('/api/v1/payments', paymentRoutes);
-app.use('/api/v1/security', securityRoutes);
+  app.use(`${prefix}/auth`, authRoutes);
+  app.use(`${prefix}/orders`, orderRoutes);
+  app.use(`${prefix}/payments`, paymentRoutes);
+  app.use(`${prefix}/security`, securityRoutes);
+};
+
+mountApiRoutes('/api/v1');
+mountApiRoutes('/v1');
 
 // 404 Handler
 app.use((_req, res) => {
@@ -98,3 +126,5 @@ app.use((err: any, req: express.Request, res: express.Response, _next: express.N
     requestId: reqId
   });
 });
+
+export default app;

@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { db, withTransaction } from '../db';
-import { Order, OrderStatus } from '../types';
+import { Order } from '../types';
 import { QrService } from './qrService';
 import { config } from '../config';
 

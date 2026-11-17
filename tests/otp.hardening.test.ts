@@ -1,5 +1,5 @@
-import { initDatabase, db } from '../src/db';
-import { OtpService } from '../src/services/otpService';
+import { initDatabase, db } from '../api/db';
+import { OtpService } from '../api/services/otpService';
 
 describe('Section E & G: OTP Hardening, Race Condition Prevention & Limits', () => {
   beforeAll(async () => {

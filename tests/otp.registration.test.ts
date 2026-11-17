@@ -1,6 +1,6 @@
-import { initDatabase, db } from '../src/db';
-import { OtpService } from '../src/services/otpService';
-import { AuthService } from '../src/services/authService';
+import { initDatabase, db } from '../api/db';
+import { OtpService } from '../api/services/otpService';
+import { AuthService } from '../api/services/authService';
 
 describe('Feature 3: OTP Verification During Registration (Indian Standards)', () => {
   beforeAll(async () => {

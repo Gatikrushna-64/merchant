@@ -3,7 +3,6 @@ import { config } from '../config';
 import fs from 'fs';
 import path from 'path';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 
 // Ensure database directory exists if not in-memory
 if (config.dbPath !== ':memory:') {

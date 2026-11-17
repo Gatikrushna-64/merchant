@@ -1,12 +1,12 @@
 import request from 'supertest';
 import crypto from 'crypto';
-import { app } from '../src/app';
-import { initDatabase, db } from '../src/db';
-import { OrderService } from '../src/services/orderService';
-import { AuthService } from '../src/services/authService';
-import { SecurityService } from '../src/services/securityService';
-import { config } from '../src/config';
-import { SESSION_COOKIE_NAME } from '../src/middleware/authMiddleware';
+import { app } from '../api/app';
+import { initDatabase, db } from '../api/db';
+import { OrderService } from '../api/services/orderService';
+import { AuthService } from '../api/services/authService';
+import { SecurityService } from '../api/services/securityService';
+import { config } from '../api/config';
+import { SESSION_COOKIE_NAME } from '../api/middleware/authMiddleware';
 import bcrypt from 'bcryptjs';
 
 describe('Section C & G: Payment Webhook Hardening, Concurrency & Idempotency', () => {

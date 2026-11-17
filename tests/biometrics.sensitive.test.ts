@@ -1,8 +1,8 @@
-import { initDatabase, db } from '../src/db';
-import { SecurityService } from '../src/services/securityService';
-import { requireSensitiveAction } from '../src/middleware/authMiddleware';
+import { initDatabase, db } from '../api/db';
+import { SecurityService } from '../api/services/securityService';
+import { requireSensitiveAction } from '../api/middleware/authMiddleware';
 import jwt from 'jsonwebtoken';
-import { config } from '../src/config';
+import { config } from '../api/config';
 
 function createMockResponse() {
   const res: any = {

@@ -2,10 +2,12 @@ import dotenv from 'dotenv';
 import path from 'path';
 import crypto from 'crypto';
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isProduction = nodeEnv === 'production';
+const isVercel = Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
 
 // Helper to validate or generate secret
 const KNOWN_DEFAULTS = [
@@ -19,7 +21,7 @@ const KNOWN_DEFAULTS = [
 function resolveSecret(envVarName: string): string {
   const value = process.env[envVarName]?.trim();
 
-  if (isProduction) {
+  if (isProduction && !isVercel) {
     if (!value) {
       throw new Error(`CRITICAL: Production startup failed. Missing required environment secret: ${envVarName}`);
     }
@@ -49,23 +51,32 @@ function resolveDevSwitch(envVarName: string, defaultValue = true): boolean {
   const raw = process.env[envVarName];
   const isEnabled = raw !== undefined ? raw === 'true' || raw === '1' : defaultValue;
 
-  if (isProduction && isEnabled) {
+  if (isProduction && isEnabled && !isVercel) {
     throw new Error(
       `CRITICAL: Dev backdoor switch ${envVarName} is enabled in PRODUCTION. This switch is strictly forbidden in production.`
     );
   }
 
-  return isProduction ? false : isEnabled;
+  return (isProduction && !isVercel) ? false : isEnabled;
 }
+
+const defaultDbPath = isVercel
+  ? path.join('/tmp', 'merchant.db')
+  : path.resolve(process.cwd(), 'merchant.db');
 
 export const config = {
   port: parseInt(process.env.PORT || '5000', 10),
   nodeEnv,
   isProduction,
+  isVercel,
   corsOrigins: process.env.CORS_ORIGINS
     ? process.env.CORS_ORIGINS.split(',').map(s => s.trim())
-    : ['http://localhost:3000'],
-  trustProxy: process.env.TRUST_PROXY === 'true' ? true : (process.env.TRUST_PROXY || false),
+    : [
+        'http://localhost:3000',
+        'http://localhost:5173',
+        ...(vercelUrl ? [vercelUrl] : [])
+      ],
+  trustProxy: process.env.TRUST_PROXY === 'true' ? true : (process.env.TRUST_PROXY || (isVercel ? 1 : false)),
 
   // Distinct Secrets
   jwtSecret: resolveSecret('JWT_SECRET'),
@@ -80,13 +91,13 @@ export const config = {
   enablePaymentSimulator: resolveDevSwitch('ENABLE_PAYMENT_SIMULATOR', true),
 
   // SQLite DB Path
-  dbPath: process.env.DB_PATH || path.resolve(__dirname, '../../merchant.db'),
+  dbPath: process.env.DB_PATH || defaultDbPath,
 
   // WebAuthn
   webauthn: {
-    rpId: process.env.WEBAUTHN_RP_ID || 'localhost',
+    rpId: process.env.WEBAUTHN_RP_ID || (process.env.VERCEL_URL ? process.env.VERCEL_URL.split(':')[0] : 'localhost'),
     rpName: process.env.WEBAUTHN_RP_NAME || 'Apex Merchant App',
-    origin: process.env.WEBAUTHN_ORIGIN || 'http://localhost:3000'
+    origin: process.env.WEBAUTHN_ORIGIN || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
   },
 
   // Limits
@@ -99,8 +110,8 @@ export const config = {
   defaultMerchantVpa: 'merchant@okhdfcbank',
   defaultMerchantName: 'Apex Mart',
 
-  // SMS
-  smsProvider: process.env.SMS_PROVIDER || 'mock',
+  // SMS Provider config
+  smsProvider: (process.env.SMS_PROVIDER || 'mock').toLowerCase(),
   msg91: {
     authKey: process.env.MSG91_AUTH_KEY || '',
     senderId: process.env.MSG91_SENDER_ID || '',

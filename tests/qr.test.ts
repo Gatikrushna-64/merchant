@@ -1,6 +1,6 @@
-import { QrService } from '../src/services/qrService';
-import { OrderService } from '../src/services/orderService';
-import { initDatabase, db } from '../src/db';
+import { QrService } from '../api/services/qrService';
+import { OrderService } from '../api/services/orderService';
+import { initDatabase, db } from '../api/db';
 
 describe('Feature 1: Dynamic UPI QR Code Generation & Verification', () => {
   beforeAll(async () => {
