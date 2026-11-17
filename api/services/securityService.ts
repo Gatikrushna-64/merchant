@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { db, withTransaction } from '../db';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 import { Merchant, Payout, Order, SensitiveAction } from '../types';
 
 export function isValidUpiVpa(vpa: string): boolean {

@@ -1,5 +1,5 @@
 import sqlite3 from 'sqlite3';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 import fs from 'fs';
 import path from 'path';
 import bcrypt from 'bcryptjs';

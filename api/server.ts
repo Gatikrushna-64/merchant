@@ -1,5 +1,5 @@
 import { app } from './app';
-import { config } from './config';
+import { appConfig as config } from './config';
 import { initDatabase } from './db';
 
 async function bootstrap() {

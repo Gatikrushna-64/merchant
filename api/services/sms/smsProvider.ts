@@ -1,4 +1,4 @@
-import { config } from '../../config';
+import { appConfig as config } from '../../config';
 
 export interface ISmsProvider {
   sendOtp(phone: string, otp: string): Promise<boolean>;

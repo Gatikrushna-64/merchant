@@ -64,7 +64,7 @@ const defaultDbPath = isVercel
   ? path.join('/tmp', 'merchant.db')
   : path.resolve(process.cwd(), 'merchant.db');
 
-export const config = {
+export const appConfig = {
   port: parseInt(process.env.PORT || '5000', 10),
   nodeEnv,
   isProduction,
@@ -118,3 +118,5 @@ export const config = {
     dltTeId: process.env.MSG91_DLT_TE_ID || ''
   }
 };
+
+export default appConfig;

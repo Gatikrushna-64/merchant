@@ -5,7 +5,7 @@ import { initDatabase, db } from '../api/db';
 import { OrderService } from '../api/services/orderService';
 import { AuthService } from '../api/services/authService';
 import { SecurityService } from '../api/services/securityService';
-import { config } from '../api/config';
+import { appConfig as config } from '../api/config';
 import { SESSION_COOKIE_NAME } from '../api/middleware/authMiddleware';
 import bcrypt from 'bcryptjs';
 

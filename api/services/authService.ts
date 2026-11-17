@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { db } from '../db';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 import { Merchant } from '../types';
 import { OtpService, isValidIndianPhone } from './otpService';
 

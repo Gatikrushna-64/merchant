@@ -3,7 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import crypto from 'crypto';
-import { config } from './config';
+import { appConfig as config } from './config';
 import { initDatabase } from './db';
 import { verifyStateChangingOrigin } from './middleware/authMiddleware';
 import { globalLimiter } from './middleware/rateLimiters';

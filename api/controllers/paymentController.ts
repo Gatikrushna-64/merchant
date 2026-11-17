@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AuthenticatedRequest } from '../middleware/authMiddleware';
 import { PaymentService } from '../services/paymentService';
 import { defaultGateway } from '../services/payment/paymentGateway';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 
 export class PaymentController {
   /**

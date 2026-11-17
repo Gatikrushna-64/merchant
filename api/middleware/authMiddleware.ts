@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 import { db } from '../db';
 import { Merchant, SensitiveAction } from '../types';
 

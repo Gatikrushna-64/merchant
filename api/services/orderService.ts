@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { db, withTransaction } from '../db';
 import { Order } from '../types';
 import { QrService } from './qrService';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 
 export const QR_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes strictly
 

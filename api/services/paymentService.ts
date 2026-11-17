@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { db, withTransaction } from '../db';
 import { Order, PaymentClassification, OrderReference } from '../types';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 
 export interface ProcessWebhookResult {
   success: boolean;

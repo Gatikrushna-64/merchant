@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { OtpService } from '../services/otpService';
 import { AuthService } from '../services/authService';
 import { SESSION_COOKIE_NAME, SESSION_MAX_AGE_MS, AuthenticatedRequest } from '../middleware/authMiddleware';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 
 export class AuthController {
   public static async sendOtp(req: Request, res: Response): Promise<void> {

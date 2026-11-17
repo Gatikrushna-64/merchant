@@ -2,7 +2,7 @@ import { initDatabase, db } from '../api/db';
 import { SecurityService } from '../api/services/securityService';
 import { requireSensitiveAction } from '../api/middleware/authMiddleware';
 import jwt from 'jsonwebtoken';
-import { config } from '../api/config';
+import { appConfig as config } from '../api/config';
 
 function createMockResponse() {
   const res: any = {

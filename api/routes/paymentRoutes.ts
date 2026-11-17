@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { PaymentController } from '../controllers/paymentController';
 import { requireAuth } from '../middleware/authMiddleware';
 import { webhookLimiter } from '../middleware/rateLimiters';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 
 const router = Router();
 

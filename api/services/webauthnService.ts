@@ -6,7 +6,7 @@ import {
 } from '@simplewebauthn/server';
 import crypto from 'crypto';
 import { db } from '../db';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 import { Merchant, SensitiveAction, WebAuthnCredentialRecord } from '../types';
 import { SecurityService } from './securityService';
 

@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { db } from '../db';
-import { config } from '../config';
+import { appConfig as config } from '../config';
 import { getSmsProvider } from './sms/smsProvider';
 import { OtpRecord } from '../types';
 

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { config } from '../../config';
+import { appConfig as config } from '../../config';
 
 export interface ParsedWebhookEvent {
   eventId: string;
