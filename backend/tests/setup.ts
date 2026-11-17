@@ -1,0 +1,11 @@
+process.env.NODE_ENV = 'test';
+process.env.DB_PATH = ':memory:';
+process.env.JWT_SECRET = 'test_jwt_secret_must_be_at_least_32_characters_long_for_security_tests';
+process.env.OTP_HMAC_SECRET = 'test_otp_secret_must_be_at_least_32_characters_long_for_security_tests';
+process.env.QR_SIGNING_SECRET = 'test_qr_secret_must_be_at_least_32_characters_long_for_security_tests';
+process.env.WEBHOOK_SECRET = 'test_webhook_secret_must_be_at_least_32_characters_long_for_security_tests';
+process.env.SEED_DEMO = 'true';
+process.env.SEED_DEMO_PIN = '123456';
+process.env.ALLOW_DEV_OTP = 'true';
+process.env.ENABLE_PAYMENT_SIMULATOR = 'true';
+process.env.CORS_ORIGINS = 'http://localhost:3000';
